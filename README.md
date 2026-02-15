@@ -1,3 +1,4 @@
+# Lexie
 Lexie "spots" (and optionally announces) countries on the amateur radio bands around the world as they become active throughout the day. Lexie listens to WSJT-X via UDP, and has two blind-accessible options.
 <br><br>- This desktop app runs with WSJT-X, multicast UDP (can't interfere with loggers, Tilly, etc.)
 <br>- No installation required, download and run just one file. See "Releases".
