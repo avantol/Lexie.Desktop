@@ -1,0 +1,171 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:Lexie.ViewModels"
+        xmlns:views="using:Lexie.Views"
+        x:Class="Lexie.Views.MainWindow"
+        x:DataType="vm:MainWindowViewModel"
+        Title="Lexie - WSJT-X Country Spotter"
+        Width="1200" Height="800" MinWidth="800" MinHeight="500"
+        Background="{StaticResource BgPrimaryBrush}">
+
+  <DockPanel>
+    <!-- Header -->
+    <Border DockPanel.Dock="Top" Background="{StaticResource HeaderBackgroundBrush}"
+            BorderBrush="{StaticResource BorderDefaultBrush}" BorderThickness="0,0,0,1"
+            Padding="16,12">
+      <Grid ColumnDefinitions="Auto,*,Auto,Auto">
+        <TextBlock Text="Lexie - WSJT-X Country Spotter"
+                   Foreground="{StaticResource TextAccentBrush}"
+                   FontSize="18" FontWeight="SemiBold" VerticalAlignment="Center" />
+
+        <!-- Voice controls -->
+        <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+          <TextBlock Text="Announce:" Foreground="{StaticResource TextMutedBrush}"
+                     VerticalAlignment="Center" FontSize="13" />
+          <ComboBox SelectedIndex="{Binding VoiceMode, Mode=TwoWay}"
+                    AutomationProperties.Name="Voice announcement mode"
+                    Background="{StaticResource BgInputBrush}"
+                    Foreground="{StaticResource TextPrimaryBrush}"
+                    FontSize="12" MinWidth="130">
+            <ComboBoxItem Content="Off" />
+            <ComboBoxItem Content="Self-voice (TTS)" />
+            <ComboBoxItem Content="Screen reader" />
+          </ComboBox>
+          <Button Content="Test" Command="{Binding TestVoiceCommand}"
+                  AutomationProperties.Name="Test voice announcement"
+                  Background="{StaticResource BgBadgeBrush}"
+                  Foreground="{StaticResource TextPrimaryBrush}"
+                  FontSize="12" Padding="10,4" />
+        </StackPanel>
+
+        <!-- Status -->
+        <StackPanel Grid.Column="3" Orientation="Horizontal" Spacing="8"
+                    Margin="16,0,0,0" VerticalAlignment="Center">
+          <Ellipse Width="10" Height="10"
+                   Fill="{Binding IsConnected, Converter={x:Static views:MainWindow.StatusColorConverter}}" />
+          <TextBlock Text="{Binding StatusText}" Foreground="{StaticResource TextPrimaryBrush}" FontSize="13" />
+        </StackPanel>
+      </Grid>
+    </Border>
+
+    <!-- Stats bar -->
+    <Border DockPanel.Dock="Top" Background="{StaticResource BgSecondaryBrush}"
+            BorderBrush="{StaticResource BorderSubtleBrush}" BorderThickness="0,0,0,1"
+            Padding="24,8">
+      <StackPanel Orientation="Horizontal" Spacing="24">
+        <StackPanel Orientation="Horizontal" Spacing="4">
+          <TextBlock Text="Countries:" Foreground="{StaticResource TextMutedBrush}" FontSize="13" />
+          <TextBlock Text="{Binding CountryCount}" Foreground="{StaticResource TextAccentBrush}"
+                     FontSize="14" FontWeight="Bold" />
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" Spacing="4">
+          <TextBlock Text="Callsigns:" Foreground="{StaticResource TextMutedBrush}" FontSize="13" />
+          <TextBlock Text="{Binding CallsignCount}" Foreground="{StaticResource TextAccentBrush}"
+                     FontSize="14" FontWeight="Bold" />
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" Spacing="4">
+          <TextBlock Text="Messages:" Foreground="{StaticResource TextMutedBrush}" FontSize="13" />
+          <TextBlock Text="{Binding MessageCount}" Foreground="{StaticResource TextAccentBrush}"
+                     FontSize="14" FontWeight="Bold" />
+        </StackPanel>
+      </StackPanel>
+    </Border>
+
+    <!-- Main content -->
+    <Grid ColumnDefinitions="*,380">
+      <!-- Left: Country grid -->
+      <ScrollViewer Grid.Column="0" Padding="16">
+        <DockPanel>
+          <TextBlock DockPanel.Dock="Top" Text="COUNTRIES HEARD"
+                     Foreground="{StaticResource TextMutedBrush}" FontSize="12"
+                     FontWeight="SemiBold" LetterSpacing="1" Margin="0,0,0,12" />
+
+          <!-- Empty state -->
+          <StackPanel IsVisible="{Binding !CountryCount}" HorizontalAlignment="Center"
+                      VerticalAlignment="Center" Margin="0,60,0,0">
+            <TextBlock Text="Waiting for WSJT-X data..." Foreground="{StaticResource TextMutedBrush}"
+                       FontSize="16" HorizontalAlignment="Center" />
+            <TextBlock Text="Make sure WSJT-X is running and configured to send UDP on port 2237"
+                       Foreground="{StaticResource TextDimBrush}" FontSize="13"
+                       HorizontalAlignment="Center" Margin="0,8,0,0" />
+          </StackPanel>
+
+          <ItemsControl ItemsSource="{Binding Countries}"
+                        AutomationProperties.Name="Countries heard">
+            <ItemsControl.ItemsPanel>
+              <ItemsPanelTemplate>
+                <WrapPanel Orientation="Horizontal" />
+              </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+              <DataTemplate x:DataType="vm:CountryCardViewModel">
+                <Border Margin="0,0,8,8" Padding="10,8,14,8" CornerRadius="8"
+                        Background="{StaticResource CardBackgroundBrush}"
+                        BorderThickness="1" MinWidth="160"
+                        AutomationProperties.Name="{Binding AutomationName}"
+                        BorderBrush="{Binding IsHighlighted,
+                          Converter={x:Static views:MainWindow.HighlightBorderConverter}}">
+                  <StackPanel>
+                    <TextBlock Text="{Binding Name}" Foreground="{StaticResource TextBrightBrush}"
+                               FontSize="14" FontWeight="SemiBold" />
+                    <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
+                      <TextBlock Text="{Binding CallsignsDisplay}" Foreground="{StaticResource TextDimBrush}"
+                                 FontSize="11" VerticalAlignment="Center" />
+                      <Border Background="{StaticResource BgBadgeBrush}" CornerRadius="10"
+                              Padding="8,1" Margin="6,0,0,0">
+                        <TextBlock Text="{Binding Count}" Foreground="{StaticResource TextAccentBrush}"
+                                   FontSize="10" FontWeight="SemiBold" />
+                      </Border>
+                    </StackPanel>
+                  </StackPanel>
+                </Border>
+              </DataTemplate>
+            </ItemsControl.ItemTemplate>
+          </ItemsControl>
+        </DockPanel>
+      </ScrollViewer>
+
+      <!-- Right: Live feed -->
+      <Border Grid.Column="1" Background="{StaticResource BgSecondaryBrush}"
+              BorderBrush="{StaticResource BorderSubtleBrush}" BorderThickness="1,0,0,0">
+        <DockPanel>
+          <Border DockPanel.Dock="Top" Padding="16,12"
+                  BorderBrush="{StaticResource BorderSubtleBrush}" BorderThickness="0,0,0,1">
+            <TextBlock Text="LIVE FEED"
+                       Foreground="{StaticResource TextMutedBrush}" FontSize="12"
+                       FontWeight="SemiBold" LetterSpacing="1" />
+          </Border>
+
+          <ListBox ItemsSource="{Binding FeedEntries}"
+                   AutomationProperties.Name="Live decode feed"
+                   Background="Transparent" BorderThickness="0"
+                   ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+            <ListBox.ItemTemplate>
+              <DataTemplate x:DataType="vm:FeedEntryViewModel">
+                <Border Padding="12,6" Margin="0">
+                <StackPanel>
+                  <TextBlock Text="{Binding TimeDisplay}" FontSize="10"
+                             Foreground="{StaticResource TextFeedTimeBrush}"
+                             FontFamily="Consolas,monospace" />
+                  <StackPanel Orientation="Horizontal" Margin="0,2,0,0">
+                    <TextBlock Text="{Binding Callsign}" FontSize="13"
+                               Foreground="{StaticResource TextCallsignBrush}"
+                               FontFamily="Consolas,monospace" FontWeight="Medium" />
+                    <TextBlock Text=" → " Foreground="{StaticResource TextMutedBrush}" FontSize="13" />
+                    <TextBlock Text="{Binding Country}" FontSize="13"
+                               Foreground="{StaticResource TextAccentBrush}" FontWeight="SemiBold" />
+                  </StackPanel>
+                  <TextBlock Text="{Binding RawMessage}" FontSize="11"
+                             Foreground="{StaticResource TextFeedTimeBrush}"
+                             FontFamily="Consolas,monospace" Margin="0,2,0,0"
+                             IsVisible="{Binding RawMessage, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+                </StackPanel>
+                </Border>
+              </DataTemplate>
+            </ListBox.ItemTemplate>
+          </ListBox>
+        </DockPanel>
+      </Border>
+    </Grid>
+  </DockPanel>
+</Window>

@@ -1,0 +1,60 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+  <!-- Background colors -->
+  <Color x:Key="BgPrimary">#0a0e17</Color>
+  <Color x:Key="BgSecondary">#0d1220</Color>
+  <Color x:Key="BgHeader">#1a1f35</Color>
+  <Color x:Key="BgCard">#151c30</Color>
+  <Color x:Key="BgCardAlt">#1a2240</Color>
+  <Color x:Key="BgBadge">#2a3a5c</Color>
+  <Color x:Key="BgInput">#1a2240</Color>
+
+  <!-- Border colors -->
+  <Color x:Key="BorderDefault">#2a3a5c</Color>
+  <Color x:Key="BorderSubtle">#1a2540</Color>
+  <Color x:Key="BorderHighlight">#4a8aff</Color>
+
+  <!-- Text colors -->
+  <Color x:Key="TextPrimary">#e0e0e0</Color>
+  <Color x:Key="TextBright">#e8f0ff</Color>
+  <Color x:Key="TextAccent">#7eb8ff</Color>
+  <Color x:Key="TextMuted">#8899bb</Color>
+  <Color x:Key="TextDim">#667799</Color>
+  <Color x:Key="TextCallsign">#ffcc44</Color>
+  <Color x:Key="TextFeedTime">#556688</Color>
+
+  <!-- Status colors -->
+  <Color x:Key="StatusRed">#ff4444</Color>
+  <Color x:Key="StatusGreen">#44ff88</Color>
+
+  <!-- Brushes -->
+  <SolidColorBrush x:Key="BgPrimaryBrush" Color="{StaticResource BgPrimary}" />
+  <SolidColorBrush x:Key="BgSecondaryBrush" Color="{StaticResource BgSecondary}" />
+  <SolidColorBrush x:Key="BgHeaderBrush" Color="{StaticResource BgHeader}" />
+  <SolidColorBrush x:Key="BgBadgeBrush" Color="{StaticResource BgBadge}" />
+  <SolidColorBrush x:Key="BgInputBrush" Color="{StaticResource BgInput}" />
+  <SolidColorBrush x:Key="BorderDefaultBrush" Color="{StaticResource BorderDefault}" />
+  <SolidColorBrush x:Key="BorderSubtleBrush" Color="{StaticResource BorderSubtle}" />
+  <SolidColorBrush x:Key="BorderHighlightBrush" Color="{StaticResource BorderHighlight}" />
+  <SolidColorBrush x:Key="TextPrimaryBrush" Color="{StaticResource TextPrimary}" />
+  <SolidColorBrush x:Key="TextBrightBrush" Color="{StaticResource TextBright}" />
+  <SolidColorBrush x:Key="TextAccentBrush" Color="{StaticResource TextAccent}" />
+  <SolidColorBrush x:Key="TextMutedBrush" Color="{StaticResource TextMuted}" />
+  <SolidColorBrush x:Key="TextDimBrush" Color="{StaticResource TextDim}" />
+  <SolidColorBrush x:Key="TextCallsignBrush" Color="{StaticResource TextCallsign}" />
+  <SolidColorBrush x:Key="TextFeedTimeBrush" Color="{StaticResource TextFeedTime}" />
+  <SolidColorBrush x:Key="StatusRedBrush" Color="{StaticResource StatusRed}" />
+  <SolidColorBrush x:Key="StatusGreenBrush" Color="{StaticResource StatusGreen}" />
+
+  <LinearGradientBrush x:Key="CardBackgroundBrush" StartPoint="0%,0%" EndPoint="100%,100%">
+    <GradientStop Color="{StaticResource BgCard}" Offset="0" />
+    <GradientStop Color="{StaticResource BgCardAlt}" Offset="1" />
+  </LinearGradientBrush>
+
+  <LinearGradientBrush x:Key="HeaderBackgroundBrush" StartPoint="0%,0%" EndPoint="100%,100%">
+    <GradientStop Color="#1a1f35" Offset="0" />
+    <GradientStop Color="#0d1220" Offset="1" />
+  </LinearGradientBrush>
+
+</ResourceDictionary>
