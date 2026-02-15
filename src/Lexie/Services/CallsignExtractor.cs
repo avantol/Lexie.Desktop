@@ -34,6 +34,9 @@ public partial class CallsignExtractor
                 result.Add(call);
         }
 
-        return result;
+        // Message format is "<to> <from> <payload>" — return only the "from" (second) callsign
+        if (result.Count >= 2) return [result[1]];
+        // CQ calls: "CQ <from> <grid>" — only one callsign found, that's the sender
+        return result.Count > 0 ? [result[0]] : [];
     }
 }
