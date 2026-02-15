@@ -5,3 +5,4 @@ Lexie "spots" (and optionally announces) countries on the amateur radio bands ar
 <br>- Options for self-voicing (sound output), screen reader (like NVDA), or silence.
 <br>- No configuration necessary, Lexie detects the default UDP port(s) WSJT-X uses, multicast or unicast.
 <br><br>Who is Lexie? The famous world traveler (get it?) who visited every country before she was past 21 years old. Inspiring.
+<br><br><img src="https://github.com/avantol/Lexie.Desktop/blob/main/Lexie.JPG">
