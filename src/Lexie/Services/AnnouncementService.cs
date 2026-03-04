@@ -13,12 +13,12 @@ public class AnnouncementService : IDisposable
         _nvda = nvda;
     }
 
-    public void Announce(string country, string callsign, VoiceMode mode)
+    public void Announce(string country, string callsign, string? prefix, VoiceMode mode)
     {
         if (mode == VoiceMode.Off) return;
 
         var spokenCall = FormatCallsignForSpeech(callsign);
-        var text = $"{country}, {spokenCall}";
+        var text = $"{prefix}{country}, {spokenCall}";
 
         if (mode == VoiceMode.SelfVoice)
         {
@@ -35,7 +35,7 @@ public class AnnouncementService : IDisposable
 
     public void Test(VoiceMode mode)
     {
-        Announce("Japan", "JA1XYZ", mode);
+        Announce("Japan", "JA1XYZ", null, mode);
     }
 
     /// <summary>

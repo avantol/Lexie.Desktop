@@ -47,6 +47,7 @@ public partial class MainWindowViewModel : ObservableObject, IDisposable
     [ObservableProperty] private string _currentBand = "";
     [ObservableProperty] private string _currentFrequency = "";
     [ObservableProperty] private string _myGridDisplay = "";
+    [ObservableProperty] private bool _announceNewCountry;
 
     public MainWindowViewModel(WsjtxParser parser, DxccLookupService dxcc,
         CallsignExtractor extractor, WsjtxUdpService udp, AnnouncementService announcer,
@@ -105,6 +106,8 @@ public partial class MainWindowViewModel : ObservableObject, IDisposable
 
     [RelayCommand]
     private void UseMi() => UseMiles = true;
+
+    partial void OnAnnounceNewCountryChanged(bool value) => SaveUserSettings();
 
     partial void OnUseMilesChanged(bool value)
     {
@@ -312,9 +315,14 @@ public partial class MainWindowViewModel : ObservableObject, IDisposable
             while (FeedEntries.Count > 200)
                 FeedEntries.RemoveAt(FeedEntries.Count - 1);
 
-            // Announce new countries
+            // Announce countries
             if (isNewCountry)
-                _announcer.Announce(country, call, VoiceMode);
+            {
+                if (AnnounceNewCountry && card.IsNewCountry)
+                    _announcer.Announce(country, call, "New Country, ", VoiceMode);
+                else if (VoiceMode != VoiceMode.Off)
+                    _announcer.Announce(country, call, null, VoiceMode);
+            }
         }
 
         if (needsResort)
@@ -478,6 +486,7 @@ public partial class MainWindowViewModel : ObservableObject, IDisposable
             SortOption = (SortOption)s.SortOption;
             SortAscending = s.SortAscending;
             UseMiles = s.UseMiles;
+            AnnounceNewCountry = s.AnnounceNewCountry;
             _loadingSettings = false;
         }
         catch { _loadingSettings = false; }
@@ -492,7 +501,8 @@ public partial class MainWindowViewModel : ObservableObject, IDisposable
             {
                 SortOption = (int)SortOption,
                 SortAscending = SortAscending,
-                UseMiles = UseMiles
+                UseMiles = UseMiles,
+                AnnounceNewCountry = AnnounceNewCountry
             };
             Directory.CreateDirectory(Path.GetDirectoryName(UserSettingsPath)!);
             File.WriteAllText(UserSettingsPath, JsonSerializer.Serialize(s));
@@ -505,6 +515,7 @@ public partial class MainWindowViewModel : ObservableObject, IDisposable
         public int SortOption { get; set; }
         public bool SortAscending { get; set; } = true;
         public bool UseMiles { get; set; } = true;
+        public bool AnnounceNewCountry { get; set; }
     }
 
     public void Dispose()
