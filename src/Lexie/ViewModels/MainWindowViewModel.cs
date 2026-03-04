@@ -1,4 +1,5 @@
 using System.Collections.ObjectModel;
+using System.Text.Json;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -18,6 +19,10 @@ public partial class MainWindowViewModel : ObservableObject, IDisposable
     private readonly AnnouncementService _announcer;
     private readonly GridSquareService _gridService;
     private readonly AdiLogService _adiLog;
+
+    private static readonly string UserSettingsPath = Path.Combine(
+        Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+        "Lexie", "settings.json");
 
     private readonly Dictionary<string, CountryCardViewModel> _countryMap = new();
     private readonly HashSet<string> _allCallsigns = new();
@@ -54,6 +59,7 @@ public partial class MainWindowViewModel : ObservableObject, IDisposable
         _announcer = announcer;
         _gridService = gridService;
         _adiLog = adiLog;
+        LoadUserSettings();
     }
 
     partial void OnSortOptionChanged(SortOption value)
@@ -61,11 +67,13 @@ public partial class MainWindowViewModel : ObservableObject, IDisposable
         ResortCountries();
         OnPropertyChanged(nameof(AscendingLabel));
         OnPropertyChanged(nameof(DescendingLabel));
+        SaveUserSettings();
     }
 
     partial void OnSortAscendingChanged(bool value)
     {
         ResortCountries();
+        SaveUserSettings();
     }
 
     public string AscendingLabel => SortOption switch
@@ -102,6 +110,7 @@ public partial class MainWindowViewModel : ObservableObject, IDisposable
     {
         foreach (var card in Countries)
             card.SetDistanceUnit(value);
+        SaveUserSettings();
     }
 
     [RelayCommand]
@@ -453,6 +462,49 @@ public partial class MainWindowViewModel : ObservableObject, IDisposable
             if (currentIndex != i)
                 Countries.Move(currentIndex, i);
         }
+    }
+
+    private bool _loadingSettings;
+
+    private void LoadUserSettings()
+    {
+        try
+        {
+            if (!File.Exists(UserSettingsPath)) return;
+            var json = File.ReadAllText(UserSettingsPath);
+            var s = JsonSerializer.Deserialize<UserSettings>(json);
+            if (s == null) return;
+            _loadingSettings = true;
+            SortOption = (SortOption)s.SortOption;
+            SortAscending = s.SortAscending;
+            UseMiles = s.UseMiles;
+            _loadingSettings = false;
+        }
+        catch { _loadingSettings = false; }
+    }
+
+    private void SaveUserSettings()
+    {
+        if (_loadingSettings) return;
+        try
+        {
+            var s = new UserSettings
+            {
+                SortOption = (int)SortOption,
+                SortAscending = SortAscending,
+                UseMiles = UseMiles
+            };
+            Directory.CreateDirectory(Path.GetDirectoryName(UserSettingsPath)!);
+            File.WriteAllText(UserSettingsPath, JsonSerializer.Serialize(s));
+        }
+        catch { /* ignore save errors */ }
+    }
+
+    private class UserSettings
+    {
+        public int SortOption { get; set; }
+        public bool SortAscending { get; set; } = true;
+        public bool UseMiles { get; set; } = true;
     }
 
     public void Dispose()

@@ -1,9 +1,11 @@
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Text.Json;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Data.Converters;
+using Avalonia.Input;
 using Avalonia.Media;
 using Avalonia.Platform.Storage;
 
@@ -104,6 +106,15 @@ public partial class MainWindow : Window
         new(highlighted => highlighted
             ? new SolidColorBrush(Color.Parse("#4a8aff"))
             : new SolidColorBrush(Color.Parse("#2a3a5c")));
+
+    private void VersionLink_OnPointerPressed(object? sender, PointerPressedEventArgs e)
+    {
+        Process.Start(new ProcessStartInfo
+        {
+            FileName = "https://github.com/avantol/Lexie.Desktop/releases/latest",
+            UseShellExecute = true
+        });
+    }
 
     // Converter: bool isActive → toggle segment background
     public static readonly FuncValueConverter<bool, IBrush> ActiveToggleBgConverter =

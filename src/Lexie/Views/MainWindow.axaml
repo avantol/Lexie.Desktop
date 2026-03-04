@@ -4,7 +4,7 @@
         xmlns:views="using:Lexie.Views"
         x:Class="Lexie.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
-        Title="Lexie - WSJT-X Country Spotter"
+        Title="Lexie v1.1 - WSJT-X Country Spotter"
         Width="1200" Height="800" MinWidth="800" MinHeight="500"
         Background="{StaticResource BgPrimaryBrush}">
 
@@ -18,8 +18,10 @@
           <TextBlock Text="Lexie - WSJT-X Country Spotter"
                      Foreground="{StaticResource TextAccentBrush}"
                      FontSize="18" FontWeight="SemiBold" VerticalAlignment="Center" />
-          <TextBlock Text="v1.0" Foreground="{StaticResource TextMutedBrush}"
-                     FontSize="12" VerticalAlignment="Center" Margin="0,3,0,0" />
+          <TextBlock Text="v1.1" Foreground="#5599dd" FontSize="13"
+                     TextDecorations="Underline" Cursor="Hand"
+                     VerticalAlignment="Center" Margin="0,3,0,0"
+                     PointerPressed="VersionLink_OnPointerPressed" />
         </StackPanel>
 
         <!-- Voice controls -->
