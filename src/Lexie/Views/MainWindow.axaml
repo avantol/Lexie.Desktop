@@ -28,11 +28,6 @@
         <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
           <TextBlock Text="Announce:" Foreground="{StaticResource TextMutedBrush}"
                      VerticalAlignment="Center" FontSize="13" />
-          <ToggleButton IsChecked="{Binding AnnounceNewCountry}" Content="New Country"
-                        AutomationProperties.Name="Announce new countries only"
-                        Background="{StaticResource BgInputBrush}"
-                        Foreground="{StaticResource TextPrimaryBrush}"
-                        FontSize="12" Padding="10,3" />
           <ComboBox SelectedIndex="{Binding VoiceMode, Mode=TwoWay}"
                     AutomationProperties.Name="Voice announcement mode"
                     Background="{StaticResource BgInputBrush}"
@@ -42,6 +37,11 @@
             <ComboBoxItem Content="Self-voice (TTS)" />
             <ComboBoxItem Content="Screen reader" />
           </ComboBox>
+          <ToggleButton IsChecked="{Binding AnnounceNewCountry}" Content="New countries only"
+                        AutomationProperties.Name="Announce new countries only"
+                        Background="{StaticResource BgInputBrush}"
+                        Foreground="{StaticResource TextPrimaryBrush}"
+                        FontSize="12" Padding="10,3" />
           <Button Content="Test" Command="{Binding TestVoiceCommand}"
                   AutomationProperties.Name="Test voice announcement"
                   Background="{StaticResource BgBadgeBrush}"

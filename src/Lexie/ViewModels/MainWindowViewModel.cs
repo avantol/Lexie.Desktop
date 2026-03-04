@@ -318,10 +318,15 @@ public partial class MainWindowViewModel : ObservableObject, IDisposable
             // Announce countries
             if (isNewCountry)
             {
-                if (AnnounceNewCountry && card.IsNewCountry)
-                    _announcer.Announce(country, call, "New Country, ", VoiceMode);
+                if (AnnounceNewCountry)
+                {
+                    if (card.IsNewCountry)
+                        _announcer.Announce(country, call, "New Country, ", VoiceMode);
+                }
                 else if (VoiceMode != VoiceMode.Off)
+                {
                     _announcer.Announce(country, call, null, VoiceMode);
+                }
             }
         }
 
