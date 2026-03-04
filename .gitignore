@@ -1,0 +1,12 @@
+bin/
+obj/
+publish/
+*.user
+*.suo
+.vs/
+.idea/
+*.DotSettings.user
+.claude/
+cty-*.dat
+*.md
+*.pdf
